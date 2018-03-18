@@ -1,0 +1,587 @@
+'Enigma coding machine
+'STEPS
+
+'declare 'beginning' subroutine which will set the rotors
+'ask user for the settings
+'set the settings
+'ask user to type character
+'encode the charcter
+'display character
+'shift right rotor by 1 (and others if needed)
+'keep going until user types "." (full stop)
+
+'NOTES
+'all input must be capital letters
+'ending is "."
+
+r = 0
+m = 0
+l = 0
+Time = 1
+
+TextWindow.Write("Left rotor (1, 2, 3, 4 or 5) :")
+left = TextWindow.ReadNumber()
+TextWindow.WriteLine("Position: ")
+leftPos = TextWindow.ReadNumber()
+leftPos = leftPos -1
+TextWindow.WriteLine("Ring Setting: ")
+leftRing = TextWindow.ReadNumber()
+leftPos = leftPos+leftRing
+leftPos = Math.Remainder(leftPos, 26)
+
+
+TextWindow.Write("Middle rotor: ")
+middle =TextWindow.ReadNumber()
+TextWindow.WriteLine("Position: ")
+midPos = TextWindow.ReadNumber() 
+midPos = midPos -1 
+TextWindow.WriteLine("Ring Setting: ")
+midRing = TextWindow.ReadNumber()
+midPos = midPos+midRing
+midPos = Math.Remainder(midPos, 26)
+
+
+TextWindow.Write("Right rotor: ")
+right = TextWindow.ReadNumber()
+TextWindow.WriteLine("Position: ")
+rightPos = TextWindow.ReadNumber() 
+rightPos = rightPos -1
+TextWindow.WriteLine("Ring Setting: ")
+rightRing = TextWindow.ReadNumber()
+rightPos = rightPos+rightRing
+rightPos = Math.Remainder(rightPos, 26)
+
+
+'turning()
+reflect = 2
+TextWindow.WriteLine("Please enter the ten plug board connections")
+plug[1][1] =TextWindow.ReadNumber()
+plug[1][2] =TextWindow.ReadNumber()
+plug[2][1] = TextWindow.ReadNumber()
+plug[2][2] =TextWindow.ReadNumber()
+plug[3][1] =TextWindow.ReadNumber()
+plug[3][2] = TextWindow.ReadNumber()
+plug[4][1] =TextWindow.ReadNumber()
+plug[4][2] =TextWindow.ReadNumber()
+plug[5][1] =TextWindow.ReadNumber()
+plug[5][2] =TextWindow.ReadNumber()
+plug[6][1] =TextWindow.ReadNumber()
+plug[6][2] = TextWindow.ReadNumber()
+plug[7][1] = TextWindow.ReadNumber()
+plug[7][2] = TextWindow.ReadNumber()
+plug[8][1] = TextWindow.ReadNumber()
+plug[8][2] =TextWindow.ReadNumber()
+plug[9][1] =TextWindow.ReadNumber()
+plug[9][2] =TextWindow.ReadNumber()
+plug[10][1] =TextWindow.ReadNumber()
+plug[10][2] =TextWindow.ReadNumber()
+
+
+beginning()
+
+letter = "r"
+
+While letter <> "."
+  TextWindow.Write("letter: ")
+  letter = TextWindow.Read()
+  
+  If letter = "A" Then
+    num = 1
+  ElseIf letter = "B" then
+    num = 2
+  elseif letter = "C" then
+    num = 3
+  elseif letter = "D" then
+    num = 4
+  elseif letter = "E" then
+    num = 5
+  elseif letter = "F" then
+    num = 6
+  elseif letter = "G" then
+    num = 7
+  elseif letter = "H" then
+    num = 8
+  elseif letter = "I" then
+    num = 9
+  elseif letter = "J" then
+    num = 10
+  elseif letter = "K" then
+    num = 11
+  elseif letter = "L" then
+    num = 12
+  elseif letter = "M" then
+    num = 13
+  elseif letter = "N" then
+    num = 14
+  elseif letter = "O" then
+    num = 15
+  elseif letter = "P" then
+    num = 16
+  elseif letter = "Q" then
+    num = 17
+  elseif letter = "R" then
+    num = 18
+  elseif letter = "S" then
+    num = 19
+  elseif letter = "T" then
+    num = 20
+  elseif letter = "U" then
+    num = 21
+  elseif letter = "V" then
+    num = 22
+  elseif letter = "W" then
+    num = 23
+  elseif letter = "X" then
+    num = 24
+  elseif letter = "Y" then
+    num = 25
+  elseif letter = "Z" then
+    num = 26
+  EndIf
+  'TextWindow.Writeline(num)
+  
+  
+  'start thew tranformations of the letters
+  If letter <> "." Then
+    
+    
+    'plugboard
+    For a = 1 To 10 
+      If plug[a][1] = num then
+        num = plug[a][2]
+      elseIf plug[a][2] = num then
+        num = plug[a][1]
+      EndIf
+    EndFor
+    
+    
+
+    'first rotor
+    num = num + rightPos
+    num = Math.Remainder(num, 26)
+    num = rotor[right][num]
+    num = num - rightPos
+    num = Math.Remainder(num, 26)
+    
+    'second rotor
+    num = num + midPos 
+    num = Math.Remainder(num, 26)
+    num = rotor[middle][num]
+    num = num - midPos
+    num = Math.Remainder(num, 26)
+
+    
+    'third rotor
+    num = num + leftPos
+    num = Math.Remainder(num, 26)
+    num = rotor[left][num]
+    num = num - leftpos
+    num = Math.Remainder(num, 26)
+    
+    'reflect
+    num = reflector[reflect][num]
+    
+    
+    'third rotor
+    num = num +leftPos
+    num = Math.Remainder(num, 26)
+    xc = "true"
+    For i = 1 to 26
+      If rotor[left][i] = num and xc = "true" then
+        num = i
+        xc = "false"
+      endif
+    endfor
+    num = num - leftPos 
+    num = Math.Remainder(num, 26)
+
+    
+    
+    'second rotor
+    num = num +midPos
+    num = Math.Remainder(num, 26)
+    xc = "true"
+    For i = 1 to 26
+      If rotor[middle][i] = num and xc = "true" then
+        num = i
+        xc = "false"
+      endif
+    endfor 
+    num = num - midPos
+    num = Math.Remainder(num, 26)
+
+    
+    
+    'first rotor again
+    num = num +rightPos
+    num = Math.Remainder(num, 26)
+    xc = "true"
+    For i = 1 to 26
+      If rotor[right][i] = num and xc = "true" then
+        num = i
+        xc = "false"
+      endif
+    endfor
+    num = num - rightPos
+    num = Math.Remainder(num, 26)
+
+    
+    
+    'plugboard
+    For a = 1 To 10 
+      If num = plug[a][1] then
+        num = plug[a][2]
+        v[a] = "False"
+      ElseIf num = plug[a][2] then
+        num = plug[a][1]
+      EndIf
+    EndFor
+
+
+    translate()
+
+    Ending[Time] = letter
+    Time = time+1
+  EndIf
+
+  move()
+
+endwhile 
+  
+For i = 1 to Array.GetItemCount(Ending)
+  TextWindow.Write(Ending[i])
+endfor
+TextWindow.WriteLine(" ")
+  
+  
+  
+  
+
+Sub beginning
+  'turn everything into rotor[1][1] = 3 etc...
+  'I 
+  rotor[1][1] = 5
+  rotor[1][2] = 11
+  rotor[1][3] = 13
+  rotor[1][4] = 6
+  rotor[1][5] = 12
+  rotor[1][6] = 7
+  rotor[1][7] = 4
+  rotor[1][8] = 17
+  rotor[1][9] = 22
+  rotor[1][10] = 26
+  rotor[1][11] = 14
+  rotor[1][12] = 20
+  rotor[1][13] = 15
+  rotor[1][14] = 23
+  rotor[1][15] = 25
+  rotor[1][16] = 8
+  rotor[1][17] = 24
+  rotor[1][18] = 21
+  rotor[1][19] = 19
+  rotor[1][20] = 16
+  rotor[1][21] = 1
+  rotor[1][22] = 9
+  rotor[1][23] = 2
+  rotor[1][24] = 18
+  rotor[1][25] = 3
+  rotor[1][26] = 10
+
+  'II 
+  rotor[2][1] = 1
+  rotor[2][2] = 10
+  rotor[2][3] = 4
+  rotor[2][4] = 11
+  rotor[2][5] = 19
+  rotor[2][6] = 9
+  rotor[2][7] = 18
+  rotor[2][8] = 21
+  rotor[2][9] = 24
+  rotor[2][10] = 2
+  rotor[2][11] = 12
+  rotor[2][12] = 8
+  rotor[2][13] = 23
+  rotor[2][14] = 20
+  rotor[2][15] = 13
+  rotor[2][16] = 3
+  rotor[2][17] = 17
+  rotor[2][18] = 7
+  rotor[2][19] = 26
+  rotor[2][20] = 14
+  rotor[2][21] = 16
+  rotor[2][22] = 25
+  rotor[2][23] = 6
+  rotor[2][24] = 22
+  rotor[2][25] = 15
+  rotor[2][26] = 5
+
+  'III
+  rotor[3][1] = 2
+  rotor[3][2] = 4
+  rotor[3][3] = 6
+  rotor[3][4] = 8
+  rotor[3][5] = 10
+  rotor[3][6] = 12
+  rotor[3][7] = 3
+  rotor[3][8] = 16
+  rotor[3][9] = 18
+  rotor[3][10] = 20
+  rotor[3][11] = 24
+  rotor[3][12] = 22
+  rotor[3][13] = 26
+  rotor[3][14] = 14
+  rotor[3][15] = 25
+  rotor[3][16] = 5
+  rotor[3][17] = 9
+  rotor[3][18] = 23
+  rotor[3][19] = 7
+  rotor[3][20] = 1
+  rotor[3][21] = 11
+  rotor[3][22] = 13
+  rotor[3][23] = 21
+  rotor[3][24] = 19
+  rotor[3][25] = 17
+  rotor[3][26] = 15
+
+  'IV
+  rotor[4][1] = 5
+  rotor[4][2] = 19
+  rotor[4][3] = 15
+  rotor[4][4] = 22
+  rotor[4][5] = 16
+  rotor[4][6] = 26
+  rotor[4][7] = 10
+  rotor[4][8] = 1
+  rotor[4][9] = 25
+  rotor[4][10] = 17
+  rotor[4][11] = 21
+  rotor[4][12] = 9
+  rotor[4][13] = 18
+  rotor[4][14] = 8
+  rotor[4][15] = 24
+  rotor[4][16] = 12
+  rotor[4][17] = 14
+  rotor[4][18] = 6
+  rotor[4][19] = 20
+  rotor[4][20] = 7
+  rotor[4][21] = 11
+  rotor[4][22] = 4
+  rotor[4][23] = 3 
+  rotor[4][24] = 13
+  rotor[4][25] = 23
+  rotor[4][26] = 2
+
+  'V
+  rotor[5][1] = 22
+  rotor[5][2] = 26
+  rotor[5][3] = 2
+  rotor[5][4] = 18
+  rotor[5][5] = 7
+  rotor[5][6] = 9
+  rotor[5][7] = 20
+  rotor[5][8] = 25
+  rotor[5][9] = 21
+  rotor[5][10] = 16
+  rotor[5][11] = 19
+  rotor[5][12] = 4
+  rotor[5][13] = 14
+  rotor[5][14] = 8
+  rotor[5][15] = 12
+  rotor[5][16] = 24
+  rotor[5][17] = 1
+  rotor[5][18] = 23
+  rotor[5][19] = 13
+  rotor[5][20] = 10
+  rotor[5][21] = 17
+  rotor[5][22] = 15
+  rotor[5][23] = 6
+  rotor[5][24] = 5
+  rotor[5][25] = 3
+  rotor[5][26] =11
+
+  'reflectors
+
+  reflector[1][1] = 5
+  reflector[1][2] = 10
+  reflector[1][3] = 13
+  reflector[1][4] = 26
+  reflector[1][5] = 1
+  reflector[1][6] = 12
+  reflector[1][7] = 25
+  reflector[1][8] = 24
+  reflector[1][9] = 22
+  reflector[1][10] = 2
+  reflector[1][11] = 23
+  reflector[1][12] = 6
+  reflector[1][13] = 3
+  reflector[1][14] = 18
+  reflector[1][15] = 17
+  reflector[1][16] = 21
+  reflector[1][17] = 15
+  reflector[1][18] = 14
+  reflector[1][19] = 20
+  reflector[1][20] = 19
+  reflector[1][21] = 16
+  reflector[1][22] = 9
+  reflector[1][23] = 11
+  reflector[1][24] = 8
+  reflector[1][25] = 7
+  reflector[1][26] = 4
+
+  reflector[2][1] = 25
+  reflector[2][2] = 18
+  reflector[2][3] = 21
+  reflector[2][4] = 8
+  reflector[2][5] = 17
+  reflector[2][6] = 19
+  reflector[2][7] = 12
+  reflector[2][8] = 4
+  reflector[2][9] = 16
+  reflector[2][10] = 24
+  reflector[2][11] = 14
+  reflector[2][12] = 7
+  reflector[2][13] = 15
+  reflector[2][14] = 11
+  reflector[2][15] = 13
+  reflector[2][16] = 9
+  reflector[2][17] = 5
+  reflector[2][18] = 2
+  reflector[2][19] = 6
+  reflector[2][20] = 26
+  reflector[2][21] = 3
+  reflector[2][22] = 23
+  reflector[2][23] = 22
+  reflector[2][24] = 10
+  reflector[2][25] = 1
+  reflector[2][26] = 20
+
+  reflector[3][1] = 6
+  reflector[3][2] = 22
+  reflector[3][3] = 16
+  reflector[3][4] = 10
+  reflector[3][5] = 9
+  reflector[3][6] = 1
+  reflector[3][7] = 15
+  reflector[3][8] = 25
+  reflector[3][9] = 5
+  reflector[3][10] = 4
+  reflector[3][11] = 18
+  reflector[3][12] = 26
+  reflector[3][13] = 24
+  reflector[3][14] = 23
+  reflector[3][15] = 7
+  reflector[3][16] = 3
+  reflector[3][17] = 20
+  reflector[3][18] = 11
+  reflector[3][19] = 21
+  reflector[3][20] = 17
+  reflector[3][21] = 19
+  reflector[3][22] = 2
+  reflector[3][23] = 14
+  reflector[3][24] = 13
+  reflector[3][25] = 8
+  reflector[3][26] = 12
+
+EndSub 
+
+Sub translate
+  If num = 1 Then
+    letter = "A"
+  ElseIf num = 2 then
+    letter = "B" 
+  elseif num = 3 then
+    letter = "C"
+  elseif num = 4 then
+    letter = "D"
+  elseif num = 5 then
+    letter = "E"
+  elseif num = 6 then
+    letter = "F"
+  elseif num = 7 then
+    letter = "G"
+  elseif num = 8 then
+    letter = "H"
+  elseif num = 9 then
+    letter = "I"
+  elseif num = 10 then
+    letter = "J"
+  elseif num = 11 then
+    letter = "K"
+  elseif num = 12 then
+    letter = "L"
+  elseif num = 13 then
+    letter = "M"
+  elseif num = 14 then
+    letter = "N"
+  elseif num = 15 then
+    letter = "O"
+  elseif num = 16 then
+    letter = "P"
+  elseif num = 17 then
+    letter = "Q"
+  elseif num = 18 then
+    letter = "R"
+  elseif num = 19 then
+    letter = "S"
+  elseif num = 20 then
+    letter = "T"
+  elseif num = 21 then
+    letter = "U"
+  elseif num = 22 then
+    letter = "V"
+  elseif num = 23 then
+    letter = "W"
+  elseif num = 24 then
+    letter = "X"
+  elseif num = 25 then
+    letter = "Y"
+  elseif num = 26 then
+    letter = "Z"
+  EndIf
+EndSub
+
+
+
+Sub move
+  'this simulates the turning of the rotors after each letter
+  r1[1] = 18 
+  r1[2] = 6
+  r1[3] = 23
+  r1[4] = 11
+  r1[5] = 1
+  
+  r1[left] = r1[left]+leftRing
+  If r1[left]>26 Then 
+    r1[left] = r1[left] - 26
+  EndIf
+  r1[middle] = r1[middle]+midRing
+  If r1[middle ]>26 Then 
+    r1[middle] = r1[middle] - 26
+  EndIf  
+  r1[right] = r1[right]+rightRing
+  If r1[right]>26 Then 
+    r1[right] = r1[right] - 26
+  EndIf  
+  
+  r = r +1
+  rightPos = rightPos + 1
+  
+  If rightPos> 26 Then
+    'r = 0
+    rightPos = 1
+  ElseIf rightPos = r1[right] -1 then
+    m = m+1
+    midPos = midPos +1
+    If midPos > 26 then
+      midPos = 1
+    elseif midPos = r1[middle]-1 then
+      l = l+1
+      leftPos = leftPos +1
+      If leftPos >26 then
+        leftPos = 1
+      EndIf
+    EndIf
+  EndIf
+
+EndSub
+
