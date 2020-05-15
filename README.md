@@ -1,7 +1,7 @@
 # Enigma-Simulator
 
 <h2> Origins </h2>
-This  is an idea that began as an IB (International Baccalaureate) Math SL (Standard Level) exploration in in highschool. 
+This is a program I wrote as an IB (International Baccalaureate) Math SL (Standard Level) exploration in in highschool. 
 
 Originally written in Small Basic (the language I was using in my CS course at the time), but I am working on creating a Python implementation 
 
